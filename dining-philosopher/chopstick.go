@@ -4,4 +4,6 @@ import "sync"
 
 type ChopStick struct {
 	sync.Mutex
+
+	ID int
 }

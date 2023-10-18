@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"html"
 	"strconv"
+	"sync"
+	"time"
 )
 
 const (
@@ -19,11 +21,26 @@ type Philosopher struct {
 	Host           *Host
 }
 
-func (p Philosopher) Eat() {
-	p.LeftChopStick.Lock()
-	p.RightChopStick.Lock()
+func (p *Philosopher) Eat(wg *sync.WaitGroup) {
+	wg.Add(1)
 
-	fmt.Println(p.Name + " is eating " + GetEmoticon(FOOD))
+	p.LeftChopStick.Lock()
+	fmt.Printf("%d locked Left chopstick: %d\n", p.ID, p.LeftChopStick.ID)
+	p.RightChopStick.Lock()
+	fmt.Printf("%d locked Right chopstick: %d\n", p.ID, p.RightChopStick.ID)
+
+	p.Host.requestChannel <- p
+
+	fmt.Printf("%d is eating %s\n", p.ID, GetEmoticon(FOOD))
+	time.Sleep(time.Millisecond)
+	fmt.Printf("%d is done eating %s\n", p.ID, GetEmoticon(FINISH))
+
+	p.LeftChopStick.Unlock()
+	fmt.Printf("%d unlocked Left chopstick: %d\n", p.ID, p.LeftChopStick.ID)
+	p.RightChopStick.Unlock()
+	fmt.Printf("%d unlocked Right chopstick: %d\n", p.ID, p.RightChopStick.ID)
+
+	wg.Done()
 }
 
 func GetEmoticon(value string) string {
