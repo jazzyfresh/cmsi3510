@@ -1,4 +1,4 @@
-package dinner
+package main
 
 import (
 	"fmt"
@@ -54,47 +54,48 @@ func (h *Host) manage() {
 }
 
 func main() {
-	var wg sync.WaitGroup
-	requestChannel := make(chan *Philosopher, NUM_EATING_PHILOSOPHER)
-	quitChannel := make(chan int, 1)
-	host := Host{
-		requestChannel:     requestChannel,
-		quitChannel:        quitChannel,
-		eatingPhilosophers: make(map[int]bool),
-	}
-
-	// make chopsticks
-	// TODO
-	chopsticks := make([]*ChopStick, NUM_CHOPSTICKS)
-	// GO IS DUMB: it has a range operator,
-	// but you can't use it for Integers
-	//     for i := range NUM_CHOPSTICKS {
-	for i := 0; i < NUM_PHILOSOPHERS; i++ {
-		chopsticks[i] = new(ChopStick)
-	}
-
-	// make philos9oophers
-	philosophers := make([]*Philosopher, NUM_PHILOSOPHERS)
-
-	for i := 0; i < NUM_PHILOSOPHERS; i++ {
-		philosophers[i] = &Philosopher{
-			ID:             i + 1,
-			Name:           "",
-			LeftChopStick:  chopsticks[i],
-			RightChopStick: chopsticks[(i+1)%5],
-			Host:           &host,
-		}
-	}
-
-	go host.manage()
-
-	for _, philosopher := range philosophers {
-		go philosopher.Eat(&wg)
-	}
-
-	wg.Wait()
-	host.quitChannel <- 1
-
-	<-host.quitChannel
+	fmt.Println("hello!")
+	// var wg sync.WaitGroup
+	// requestChannel := make(chan *Philosopher, NUM_EATING_PHILOSOPHER)
+	// quitChannel := make(chan int, 1)
+	// host := Host{
+	// 	requestChannel:     requestChannel,
+	// 	quitChannel:        quitChannel,
+	// 	eatingPhilosophers: make(map[int]bool),
+	// }
+	//
+	// // make chopsticks
+	// // TODO
+	// chopsticks := make([]*ChopStick, NUM_CHOPSTICKS)
+	// // GO IS DUMB: it has a range operator,
+	// // but you can't use it for Integers
+	// //     for i := range NUM_CHOPSTICKS {
+	// for i := 0; i < NUM_PHILOSOPHERS; i++ {
+	// 	chopsticks[i] = new(ChopStick)
+	// }
+	//
+	// // make philos9oophers
+	// philosophers := make([]*Philosopher, NUM_PHILOSOPHERS)
+	//
+	// for i := 0; i < NUM_PHILOSOPHERS; i++ {
+	// 	philosophers[i] = &Philosopher{
+	// 		ID:             i + 1,
+	// 		Name:           "",
+	// 		LeftChopStick:  chopsticks[i],
+	// 		RightChopStick: chopsticks[(i+1)%5],
+	// 		Host:           &host,
+	// 	}
+	// }
+	//
+	// go host.manage()
+	//
+	// // for _, philosopher := range philosophers {
+	// // 	go philosopher.Eat(&wg)
+	// // }
+	//
+	// wg.Wait()
+	// host.quitChannel <- 1
+	//
+	// <-host.quitChannel
 
 }

@@ -1,4 +1,4 @@
-package dinner
+package main
 
 import "sync"
 
