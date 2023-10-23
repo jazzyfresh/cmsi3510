@@ -6,7 +6,7 @@
   * programming fundamentals: variables, functions, for loops, structs
   * modules
     - how to build and run multi-file go programs
-    - `go mod init` : creates a go.mod file for your program
+    - `go mod init example.com/dinner` : creates a go.mod file for your program
     - `go build` : builds the binary
     - `go run .` : runs the binary
   * concurrency
