@@ -29,7 +29,10 @@ type Host struct {
 }
 
 func (h *Host) manage() {
+	// Loop FOR EVER
 	for {
+
+		// Managing the state of the dinner table
 
 		select {
 		// handling a philosopher request
@@ -59,6 +62,8 @@ func (h *Host) manage() {
 
 		}
 
+		// TODO: print global view of the table
+
 		// similar to a switch stmt
 		select {
 		case <-h.quitChannel:
@@ -79,7 +84,8 @@ func main() {
 	var wg sync.WaitGroup
 
 	// Make our channels for managing requests
-	requestChannel := make(chan *Philosopher, NUM_EATING_PHILOSOPHER)
+	requestChannel := make(chan *Philosopher)
+	eatingChannel := make(chan *Philosopher, NUM_EATING_PHILOSOPHER)
 	// The quit channel signals the Host to stop managing the dinner party
 	// because we're ending the program
 	quitChannel := make(chan int, 1)
@@ -87,21 +93,21 @@ func main() {
 	// Create a Host
 	host := Host{
 		requestChannel:     requestChannel,
+		eatingChannel:      eatingChannel,
 		quitChannel:        quitChannel,
 		eatingPhilosophers: make(map[int]bool),
 	}
 
+	// SHARED RESOURCES
 	// make chopsticks
 	chopsticks := make([]*ChopStick, NUM_CHOPSTICKS)
-	// GO IS DUMB: it has a range operator,
-	// but you can't use it for Integers
-	//     for i := range NUM_CHOPSTICKS {
 	for i := 0; i < NUM_PHILOSOPHERS; i++ {
 		chopsticks[i] = &ChopStick{
 			ID: i + 1,
 		}
 	}
 
+	// THREADS
 	// make philosophers
 	philosophers := make([]*Philosopher, NUM_PHILOSOPHERS)
 
