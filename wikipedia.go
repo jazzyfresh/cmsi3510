@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func fetchWiki(city string) {
+func fetchWiki(city string) string {
 	url := fmt.Sprintf("https://en.wikipedia.org/wiki/%s", city)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -15,6 +15,7 @@ func fetchWiki(city string) {
 	}
 
 	defer resp.Body.Close()
+	return fmt.Sprintf("URL: %s", url)
 }
 
 func fetchWikiAsync(city string, ch chan<- string, wg *sync.WaitGroup) {
@@ -44,7 +45,6 @@ func main() {
 	var wg sync.WaitGroup
 
 	for _, city := range cities {
-		// fetchWiki(city)
 
 		// WHY?: can we call a function on an object that
 		//       was declared, but not defined
@@ -53,6 +53,7 @@ func main() {
 	}
 
 	// WHY?: do we call the the waitgroup wait in its own thread
+	// we need to wait for all the goroutines to finish before we close them all
 	go func() {
 		wg.Wait()
 		close(ch)
