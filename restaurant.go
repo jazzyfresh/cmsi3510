@@ -52,7 +52,7 @@ func Cook(name string) {
 }
 
 func Customer(name string, wg *sync.WaitGroup, counter *int64) {
-	for mealsEaten := 0; mealsEaten < 5; {
+	for mealsEaten := 0; mealsEaten < 5; mealsEaten++ {
 		// increment the counter
 		var orderID int64 = atomic.AddInt64(counter, 1)
 		// place an order
@@ -90,10 +90,8 @@ func main() {
 	go Cook("Colette")
 	//
 	// Wait for all customers to finish
-	go func() {
-		wg.Wait()
-		close(Waiter)
-	}()
+	wg.Wait()
+	close(Waiter)
 
 	log.Println("Restaurant is closing")
 }
